@@ -31,7 +31,5 @@ public class TipoAcomodacao {
 	public String getNome() {
 		return nome;
 	}
-	
-	
 
 }

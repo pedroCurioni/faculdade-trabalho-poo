@@ -17,7 +17,7 @@ public class Acomodacao implements IAcomodacao {
 	public EEstadoOcupacao getEstadoOcupacao() {
 		return estadoOcupacao;
 	}
-	   
+
 	public void setEstadoOcupacao(EEstadoOcupacao estadoOcupacao) {
 		this.estadoOcupacao = estadoOcupacao;
 	}
@@ -40,7 +40,7 @@ public class Acomodacao implements IAcomodacao {
 
 	@Override
 	public double getTarifaDiaria() {
-		
+
 		return tipo.getTarifaDiaria();
 	}
 

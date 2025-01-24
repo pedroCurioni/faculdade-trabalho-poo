@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import exception.HospedagemException;
+
 public class Hospedagem {
 
 	private static int InicioCheckIn = 13;
@@ -19,17 +21,19 @@ public class Hospedagem {
 	private IConta conta;
 	private ArrayList<Pagamento> pagamento;
 
-	public Hospedagem(String id, Date checkin, Date checkout, IHospede hospede, IAcomodacao acomodacao, IConta conta,
-			ArrayList<Pagamento> pagamento) {
-		super();
+	public Hospedagem(String id, IHospede hospede, IAcomodacao acomodacao, IConta conta) throws HospedagemException {
+		if (acomodacao.getEstadoOcupacao() != EEstadoOcupacao.DISPONIVEL) {
+			throw new HospedagemException("Acomodação indisponivel");
+		}
+
 		this.id = UUID.randomUUID().toString();
-		this.checkin = checkin;
+		this.checkin = new Date();
 		this.checkout = null;
 		this.hospede = hospede;
 		this.acompanhantes = new ArrayList<IHospede>();
 		this.acomodacao = acomodacao;
 		this.conta = conta;
-		this.pagamento = pagamento;
+		this.pagamento = new ArrayList<Pagamento>();
 		this.acomodacao.setEstadoOcupacao(EEstadoOcupacao.OCUPADO);
 	}
 
@@ -104,42 +108,39 @@ public class Hospedagem {
 	public ArrayList<IHospede> getAcompanhantes() {
 		return acompanhantes;
 	}
-	
+
 	public void addAcompanhantes(ArrayList<IHospede> i) {
 		acompanhantes.addAll(i);
 	}
-	
+
 	public int quantidadeOcupantes() {
-		return acompanhantes.size()+1;
+		return acompanhantes.size() + 1;
 	}
-	
+
 	public double calculaTotalDiaria() {
-		return (acomodacao.getTarifaDiaria()+acomodacao.getAdicionaAcompanhante())*(quantidadeOcupantes()-1);
+		return (acomodacao.getTarifaDiaria() + acomodacao.getAdicionaAcompanhante()) * (quantidadeOcupantes() - 1);
 	}
-	
+
 	public static long getIntervaloDias(Date dataInicial, Date dataFinal) {
 		long milisegundoPorDia = (24 * 60 * 60 * 1000);
-		return(dataFinal.getTime() - dataInicial.getTime())/milisegundoPorDia;
-		
+		return (dataFinal.getTime() - dataInicial.getTime()) / milisegundoPorDia;
+
 	}
-	
+
 	public double precoTotalHospedagem() {
-		return getIntervaloDias(checkin,checkout)*calculaTotalDiaria();
+		return getIntervaloDias(checkin, checkout) * calculaTotalDiaria();
 	}
-	
+
 	public double precoTotal() {
 		return precoTotalHospedagem() + conta.getTotal();
 	}
-	
-	
-	
+
 	public StringBuilder listar() {
-		
+
 		StringBuilder sb = new StringBuilder();
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		
-				
+
 		sb.append("\nHospede: " + hospede.getNome());
 		sb.append("\nTipo: " + acomodacao.getTipo());
 		sb.append("\nCheckin         : " + sdf.format(getCheckin()));
@@ -148,7 +149,7 @@ public class Hospedagem {
 		sb.append("\nValor Total Diaria: " + calculaTotalDiaria());
 		sb.append(conta.listar());
 		sb.append("\nPrecoTotal: " + precoTotal());
-		
+
 		return sb;
 	}
 

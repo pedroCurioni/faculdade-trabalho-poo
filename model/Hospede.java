@@ -1,12 +1,12 @@
 package model;
 
 public class Hospede implements IHospede {
-	private final long cpf;
+	private final String cpf;
 	private String nome;
 	private String email;
 	private long telefone;
 
-	public Hospede(long cpf, String nome, String email, long telefone) {
+	public Hospede(String cpf, String nome, String email, long telefone) {
 		super();
 		this.cpf = cpf;
 		this.nome = nome;
@@ -38,12 +38,8 @@ public class Hospede implements IHospede {
 		this.telefone = telefone;
 	}
 
-	public long getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
 
-	
-	
-	
-	
 }
