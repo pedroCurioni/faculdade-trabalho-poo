@@ -33,6 +33,10 @@ public class ItemConta {
 		return item;
 	}
 
+	public double getTotal() {
+		return getPreco() * getQtde();
+	}
+
 	public StringBuilder listar() {
 		StringBuilder sb = new StringBuilder();
 

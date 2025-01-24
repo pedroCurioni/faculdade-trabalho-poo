@@ -27,7 +27,7 @@ public class Conta implements IConta {
 		double total = 0;
 
 		for (ItemConta itemConta : itens) {
-			total += (itemConta.getPreco() * itemConta.getQtde());
+			total += itemConta.getTotal();
 		}
 
 		return total;
